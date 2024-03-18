@@ -8,7 +8,7 @@ jobs:
   build:
     strategy:
       matrix:
-        clang-version: [ 3.9, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12.0.1, 13, 14, 15, 16, 17 ]
+        clang-version: [ 3.9, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12.0.1, 13, 14, 14.0.5, 15, 16, 17 ]
         os: [ linux, macosx, windows ]
         include:
           - clang-version: 3.9
@@ -40,6 +40,8 @@ jobs:
             release: llvm-project-13.0.0.src
           - clang-version: 14
             release: llvm-project-14.0.0.src
+          - clang-version: 14.0.5
+            release: llvm-project-14.0.5.src
           - clang-version: 15
             release: llvm-project-15.0.2.src
           - clang-version: 16
@@ -98,7 +100,7 @@ jobs:
         curl -LO https://github.com/llvm/llvm-project/releases/download/llvmorg-${version}/cfe-${version}.src.tar.xz
         curl -LO https://github.com/llvm/llvm-project/releases/download/llvmorg-${version}/clang-tools-extra-${version}.src.tar.xz
     - name: get llvm-project
-      if: ${{ matrix.clang-version >= 9 || matrix.clang-version == '12.0.1' }}
+      if: ${{ matrix.clang-version >= 9 || matrix.clang-version == '12.0.1' || matrix.clang-version =='14.0.5' }}
       shell: bash
       run: |
         version=${RELEASE##llvm-project-}; version=${version%.src}
@@ -122,7 +124,7 @@ jobs:
         mv ${{ matrix.release }}/clang ${{ matrix.release }}/llvm/tools/clang
         mv ${{ matrix.release }}/clang-tools-extra ${{ matrix.release }}/llvm/tools/clang/tools/extra
     - name: unpack llvm-project
-      if: ${{ matrix.clang-version >= 9 || matrix.clang-version == '12.0.1' }}
+      if: ${{ matrix.clang-version >= 9 || matrix.clang-version == '12.0.1' || matrix.clang-version =='14.0.5' }}
       shell: bash
       run: |
         tar xf ${{ matrix.release }}.tar.xz ${{ matrix.extra-tar-args }}
